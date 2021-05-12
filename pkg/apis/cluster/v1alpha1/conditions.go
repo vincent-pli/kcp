@@ -32,10 +32,10 @@ func (c Conditions) HasReady() bool {
 	return false
 }
 
-func (c Conditions) SetReady(status corev1.ConditionStatus, reason, message string) {
-	for idx, cond := range c {
+func (c *Conditions) SetReady(status corev1.ConditionStatus, reason, message string) {
+	for idx, cond := range *c {
 		if cond.Type == ClusterConditionReady {
-			c[idx] = Condition{
+			(*c)[idx] = Condition{
 				Type:               ClusterConditionReady,
 				Status:             status,
 				Reason:             reason,
@@ -45,7 +45,7 @@ func (c Conditions) SetReady(status corev1.ConditionStatus, reason, message stri
 			return
 		}
 	}
-	c = append(c, Condition{
+	*c = append(*c, Condition{
 		Type:               ClusterConditionReady,
 		Status:             status,
 		Reason:             reason,
